@@ -65,6 +65,11 @@ function App2()
                 console.log(res.data)
             })
     },[])
+
+    // 이벤트
+    const handleChange=(e)=>{
+        console.log(e.target.value);
+    }
     //console.log(music)
     // render()
     // for if
@@ -97,7 +102,9 @@ function App2()
           <table className={"table"}>
               <tr>
                   <td>
-                      <input type={"text"} className={"input-sm"} size={"25"}/>
+                      <input type={"text"} className={"input-sm"} size={"25"}
+                      onChange={handleChange}
+                      />
                   </td>
               </tr>
           </table>
