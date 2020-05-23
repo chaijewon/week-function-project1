@@ -4,18 +4,41 @@ import axios from 'axios'
 
 
 function App3() {
+   // 변수 설정
+    const [music,setMusic]=useState([]);
+    const [ss,setSs]=useState("");
+    // 변수 초기값
+    useEffect(()=>{
+        axios.get('http://localhost:3000/music.json').then((res)=>{
+            setMusic(res.data)
+        })
+    },[])// mount할때만 실행 => componentDidMount,componentDidUpdate
    return (
        <div className={"row"}>
         <H/>
         <SearchBar/>
         <div style={{"height":"30px"}}></div>
-        <MusicTable/>
+        <MusicTable music={music} ss={ss}/>
        </div>
 
    )
 }
-
-function MusicTable() {
+/*
+      var s="abcdefg";
+             0123456
+      var n=s.indexOf("k"); ==> -1
+      n=0
+ */
+function MusicTable(props) {
+    let row=[];
+    props.music.forEach((m)=>{
+        if(m.title.indexOf(props.ss)==-1)
+        {
+            return;
+        }
+        // 배열에 추가
+        row.push(<MusicRow music={m}/>);
+    })
    return (
        <table className={"table"}>
            <thead>
@@ -26,12 +49,22 @@ function MusicTable() {
                 <th>가수명</th>
             </tr>
            </thead>
+           <tbody>
+           {row}
+           </tbody>
        </table>
    )
 }
 
-function MusicRow() {
-
+function MusicRow(props) {
+    return (
+        <tr>
+            <td>{props.music.rank}</td>
+            <td><img src={props.music.poster} width={"30"} height={"30"}/> </td>
+            <td>{props.music.title}</td>
+            <td>{props.music.singer}</td>
+        </tr>
+    )
 }
 
 function SearchBar() {
@@ -58,3 +91,5 @@ const H=()=>{
 const H2=()=>{
 
 }
+
+export default App3;
