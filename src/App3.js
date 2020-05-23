@@ -13,10 +13,15 @@ function App3() {
             setMusic(res.data)
         })
     },[])// mount할때만 실행 => componentDidMount,componentDidUpdate
+
+    // 이벤트 등록
+    const handleUserInput=useCallback((ss)=>{
+        setSs(ss);
+    },[ss])// ss:입력한 단어 => ss가 변경될때만 호출
    return (
        <div className={"row"}>
-        <H/>
-        <SearchBar/>
+        <H2/>
+        <SearchBar ss={ss} onUserInput={handleUserInput}/>
         <div style={{"height":"30px"}}></div>
         <MusicTable music={music} ss={ss}/>
        </div>
@@ -28,6 +33,9 @@ function App3() {
              0123456
       var n=s.indexOf("k"); ==> -1
       n=0
+
+      CallBack : 함수의 주소
+      Memo : 함수의 리턴형
  */
 function MusicTable(props) {
     let row=[];
@@ -67,14 +75,18 @@ function MusicRow(props) {
     )
 }
 
-function SearchBar() {
+function SearchBar(props) {
    // useCallback
+    const onChange=(e)=>{
+        props.onUserInput(e.target.value);// App3
+    }
     return (
         <table className={"table"}>
             <tr>
                 <td>
                     <input type={"text"} size={"25"} className={"input-sm"}
-                      placeholder={"Search"}
+                      placeholder={"Search"} onChange={onChange}
+                           value={props.ss}
                     />
                 </td>
             </tr>
@@ -84,12 +96,22 @@ function SearchBar() {
 
 const H=()=>{
   // memo
+    const color=["red","blue","green","yellow","pink"];
+    const no=parseInt(Math.random()*5);
+    // Math.random() => 0.0~0.99 => 5*0.0 => 0.0 ~ 0.99*5 ==> 4.9999
+    // 0~4
     return (
-        <h1 className={"text-center"}>Music Top 50</h1>
+        <h1 className={"text-center"} style={{"color":color[no]}}>Music Top 50</h1>
     )
 }
-const H2=()=>{
-
-}
+const H2=React.memo(()=>{
+    const color=["red","blue","green","yellow","pink"];
+    const no=parseInt(Math.random()*5);
+    // Math.random() => 0.0~0.99 => 5*0.0 => 0.0 ~ 0.99*5 ==> 4.9999
+    // 0~4
+    return (
+        <h1 className={"text-center"} style={{"color":color[no]}}>Music Top 50</h1>
+    )
+});
 
 export default App3;
